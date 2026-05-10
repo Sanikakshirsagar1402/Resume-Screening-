@@ -1,0 +1,6 @@
+transformers
+torch
+sentence-transformers
+numpy
+pandas
+scikit-learn
