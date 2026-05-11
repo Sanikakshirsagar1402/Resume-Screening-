@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { PDFParse } = require("pdf-parse");
+const pdfParse = require("pdf-parse");
 const mammoth = require("mammoth");
 const { spawn } = require("child_process");
 const path = require("path");
@@ -25,8 +25,7 @@ exports.uploadResume = async (req, res) => {
     // 1. EXTRACT TEXT
     if (req.file.mimetype === "application/pdf") {
       try {
-        const parser = new PDFParse({ data: fileBuffer });
-        const data = await parser.getText();
+        const data = await pdfParse(fileBuffer);
         resumeText = data.text;
       } catch (err) {
         console.error("PDF PARSE ERROR:", err);
