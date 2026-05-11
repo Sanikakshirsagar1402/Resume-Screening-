@@ -34,30 +34,18 @@ app.use("/api/resumes", resumeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Backend running");
-});
-
 // SERVE FRONTEND IN PRODUCTION
 if (process.env.NODE_ENV === "production") {
   const clientBuildPath = path.join(__dirname, "../client/my-project/dist");
   app.use(express.static(clientBuildPath));
+  
+  app.get("(.*)", (req, res) => {
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+  });
 }
 
 app.get("/api/ping", (req, res) => {
   res.json({ message: "pong", time: new Date() });
-});
-
-// Catch-all route handler (Fixes Express v5 wildcard error)
-app.use((req, res) => {
-  if (process.env.NODE_ENV === "production") {
-    const clientBuildPath = path.join(__dirname, "../client/my-project/dist");
-    res.sendFile(path.join(clientBuildPath, "index.html"));
-  } else {
-    res.status(404).json({
-      message: "Route not found"
-    });
-  }
 });
 
 // app.use((req, res, next) => {
