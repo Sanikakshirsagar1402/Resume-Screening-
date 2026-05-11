@@ -34,19 +34,32 @@ app.use("/api/resumes", resumeRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/applications", applicationRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Backend running");
+});
+
 // SERVE FRONTEND IN PRODUCTION
 if (process.env.NODE_ENV === "production") {
   const clientBuildPath = path.join(__dirname, "../client/my-project/dist");
   app.use(express.static(clientBuildPath));
-  
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(clientBuildPath, "index.html"));
-  });
 }
 
 app.get("/api/ping", (req, res) => {
   res.json({ message: "pong", time: new Date() });
 });
+
+// Catch-all route handler (Fixes Express v5 wildcard error)
+app.use((req, res) => {
+  if (process.env.NODE_ENV === "production") {
+    const clientBuildPath = path.join(__dirname, "../client/my-project/dist");
+    res.sendFile(path.join(clientBuildPath, "index.html"));
+  } else {
+    res.status(404).json({
+      message: "Route not found"
+    });
+  }
+});
+
 // app.use((req, res, next) => {
 //   console.log("REQ URL:", req.url);
 //   next();
@@ -58,16 +71,23 @@ app.get("/api/ping", (req, res) => {
 console.log("Starting server...");
 
 //  CONNECT DATABASE AND START SERVER
+console.log("Connecting to MongoDB at:", process.env.MONGO_URI ? "URI provided" : "URI MISSING");
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Database connected successfully");
 
-    app.listen(process.env.PORT || 5000, () => {
-      console.log("Server running on port", process.env.PORT || 5000);
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log("Server running on port", PORT);
     });
   })
   .catch((err) => {
-    console.error("Database connection failed:", err.message);
+    console.error("CRITICAL: Database connection failed!");
+    console.error("Error details:", err.message);
+    // In production, we don't want the server to just hang if DB fails
+    // process.exit(1) is used by Render to know the app crashed
+    process.exit(1);
   });
 
 //   app.get("/", (req, res) => {

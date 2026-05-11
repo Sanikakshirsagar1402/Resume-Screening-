@@ -9,7 +9,7 @@
     "start": "node server/server.js",
     "server": "cd server && npm start",
     "client": "cd client/my-project && npm run dev",
-    "render-postbuild": "pip install -r server/ml/requirements.txt"
+    "render-postbuild": "pip install --no-cache-dir -r server/ml/requirements.txt"
   },
   "dependencies": {
     "react-hot-toast": "^2.6.0"

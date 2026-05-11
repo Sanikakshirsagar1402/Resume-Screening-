@@ -1,6 +1,5 @@
-transformers
-torch
-sentence-transformers
 numpy
 pandas
 scikit-learn
+# Heavy libraries like torch/transformers are excluded to fit Render's free tier (512MB RAM).
+# matcher_fast.py uses a pseudo-semantic approach as a lightweight alternative.
