@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import Spinner from "../components/Spinner";
 import { Mail, Phone, FileText, CheckCircle, XCircle, Calendar, Clock, MapPin, X, Download } from "lucide-react";
-import API from "../services/api";
+import API, { API_BASE_URL } from "../services/api";
 
 export default function JobApplicants() {
   const { jobId } = useParams();
@@ -104,7 +104,7 @@ export default function JobApplicants() {
               <div className="flex flex-col gap-2 mt-6">
                 {app.resumeId && (
                   <a
-                    href={`http://localhost:5000/api/resumes/download/${app.resumeId._id}?token=${localStorage.getItem("token")}`}
+                    href={`${API_BASE_URL}/api/resumes/download/${app.resumeId._id}?token=${localStorage.getItem("token")}`}
                     className="flex-1 text-center bg-gray-900 text-white py-2.5 rounded-lg hover:bg-black transition text-xs font-bold flex items-center justify-center gap-2 shadow-sm"
                   >
                     <Download size={14} />

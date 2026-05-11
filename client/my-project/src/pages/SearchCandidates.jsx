@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import API from "../services/api";
+import API, { API_BASE_URL } from "../services/api";
 import { 
   Search, 
   FileText, 
@@ -252,7 +252,7 @@ export default function SearchCandidates() {
 
               <div className="flex flex-col sm:flex-row gap-4 pt-10 border-t border-gray-100">
                 <a
-                  href={`http://localhost:5000/api/resumes/download/${selectedCandidate.id}?token=${localStorage.getItem("token")}`}
+                  href={`${API_BASE_URL}/api/resumes/download/${selectedCandidate.id}?token=${localStorage.getItem("token")}`}
                   className="flex-1 bg-gray-900 text-white py-5 rounded-[2rem] font-black text-xl hover:bg-black transition-all flex items-center justify-center gap-3 shadow-2xl shadow-gray-200 active:scale-[0.98]"
                 >
                   <Download size={24} />
